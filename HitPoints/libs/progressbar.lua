@@ -137,7 +137,11 @@ progressbar.DrawBarFg = function(startPosition, endPosition, gradientStart, grad
 
 	local gradient = GetGradient(gradientStart, gradientEnd);
 
-	imgui.GetWindowDrawList():AddImageRounded(GetFgBodyTexture(), startPosition, endPosition, {0, 0}, {1, 1}, IM_COL32_WHITE, rounding, cornerFlags);
+    if gradientStart == '#cf3437' then
+        imgui.GetWindowDrawList():AddImageRounded(gradient, startPosition, endPosition, {0, 0}, {1, 1}, IM_COL32_WHITE, rounding, cornerFlags);
+    else
+        imgui.GetWindowDrawList():AddImageRounded(GetFgBodyTexture(), startPosition, endPosition, {0, 0}, {1, 1}, IM_COL32_WHITE, rounding, cornerFlags);
+    end
 end
 
 progressbar.DrawBarBg = function(startPosition, endPosition, gradientStart, gradientEnd, rounding, cornerFlags)
