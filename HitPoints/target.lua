@@ -29,10 +29,12 @@ T{
 	nameXOffset = 12,
 	nameYOffset = 9,
 	iconSize = 26,
-	arrowSize = 30,
+	arrowSize = 20,
 	nameTextYOffset = 3,
-	nameTextXOffset = 3,
-	percentTextXOffset = 15,
+	nameTextXOffset = 12,
+    totNameTextYOffset = 3,
+    percentTextYOffset = 3,
+	percentTextXOffset = 0,
 	distTextXOffset = -3,
 	name_font_settings = 
 	{
@@ -40,9 +42,9 @@ T{
 		box_width = 0,
 		font_alignment = texts.Alignment.Left;
 		font_color = 0xFFFFFFFF,
-		font_family = 'Consolas',
-		font_flags = texts.FontFlags.Bold,
-		font_height = 17,
+		font_family = 'MS Gothic',
+		font_flags = texts.FontFlags.Italic + texts.FontFlags.Bold,
+		font_height = 16,
 		gradient_color = 0x00000000,
 		gradient_style = 0,
 		outline_color = 0xFF000000,
@@ -58,8 +60,8 @@ T{
 		box_width = 0,
 		font_alignment = texts.Alignment.Left;
 		font_color = 0xFFFFFFFF,
-		font_family = 'Consolas',
-		font_flags = texts.FontFlags.Bold,
+		font_family = 'MS Gothic',
+		font_flags = texts.FontFlags.Italic + texts.FontFlags.Bold,
 		font_height = 16,
 		gradient_color = 0x00000000,
 		gradient_style = 0,
@@ -76,7 +78,7 @@ T{
 		box_width = 0,
 		font_alignment = texts.Alignment.Right;
 		font_color = 0xFFFFFFFF,
-		font_family = 'Consolas',
+		font_family = 'Bembo',
 		font_flags = texts.FontFlags.Bold,
 		font_height = 15,
 		gradient_color = 0x00000000,
@@ -94,16 +96,16 @@ T{
 		box_width = 0,
 		font_alignment = texts.Alignment.Right;
 		font_color = 0xFFFFFFFF,
-		font_family = 'Consolas',
-		font_flags = texts.FontFlags.Bold,
+		font_family = 'Bembo',
+		font_flags = texts.FontFlags.Italic + texts.FontFlags.Bold,
 		font_height = 15,
 		gradient_color = 0x00000000,
 		gradient_style = 0,
 		outline_color = 0xFF000000,
 		outline_width = 3,
 	
-		position_x = 0,
-		position_y = 0,
+		position_x = 15,
+		position_y = 3,
 		text = '',
 	};
 };
@@ -138,7 +140,7 @@ target.Initialize = function(settings)
 	nameText = texts:create_object(settings.name_font_settings, false);
 	totNameText = texts:create_object(settings.totName_font_settings, false);
 	distText = texts:create_object(settings.distance_font_settings, false);
-	arrowTexture = 	LoadTexture("arrow");
+	arrowTexture = 	LoadTexture("attention");
 	initialized = true;
 end
 
@@ -370,8 +372,8 @@ target.DrawWindow = function(settings)
 		distText:set_visible(true);
 
 		if (isMonster or gConfig.alwaysShowHealthPercent) then
-			percentText:set_position_x(startX + targetSettings.barWidth - targetSettings.percentTextXOffset);
-			percentText:set_position_y(startY - targetSettings.distance_font_settings.font_height);
+			percentText:set_position_x(startX + targetSettings.barWidth - targetSettings.name_font_settings.position_x - targetSettings.percentTextXOffset);
+			percentText:set_position_y(startY - targetSettings.percent_font_settings.font_height - targetSettings.percentTextYOffset);
 			percentText:set_text(tostring(targetHpPercent));
 			percentText:set_visible(true);
 			local hpColor, _ = GetHpColors(targetEntity.HPPercent / 100);
@@ -410,7 +412,7 @@ target.DrawWindow = function(settings)
 			imgui.SetCursorScreenPos({preBuffX, preBuffY});
 			local totX, totY = imgui.GetCursorScreenPos();
 			local totColor = GetColorOfTarget(totEntity, totIndex);
-			imgui.SetCursorScreenPos({totX, totY + targetSettings.barHeight/2 - targetSettings.arrowSize/2});
+			imgui.SetCursorScreenPos({totX + 40, totY + targetSettings.barHeight/2 - targetSettings.arrowSize/2});
 			imgui.Image(tonumber(ffi.cast("uint32_t", arrowTexture.image)), { targetSettings.arrowSize, targetSettings.arrowSize });
 			imgui.SameLine();
 
@@ -421,7 +423,7 @@ target.DrawWindow = function(settings)
 			progressbar.ProgressBar({{totEntity.HPPercent / 100, {'#e16c6c', '#fb9494'}}}, {targetSettings.barWidth / 3, targetSettings.totBarHeight}, {decorate = gConfig.showBookends});
 
 			totNameText:set_position_x(totStartX + targetSettings.nameTextXOffset);
-			totNameText:set_position_y(totStartY - targetSettings.totName_font_settings.font_height);
+			totNameText:set_position_y(totStartY - targetSettings.totName_font_settings.font_height - targetSettings.totNameTextYOffset);
 			totNameText:set_font_color(totColor);
 			totNameText:set_text(totEntity.Name);
 			totNameText:set_visible(true);

@@ -51,9 +51,9 @@ T{
 	statusIconTheme = 'XIView';
 
 	showTargetBar = true,
-	targetBarScaleX = 1,
-	targetBarScaleY = 1,
-	targetBarFontOffset = 0,
+	targetBarScaleX = 0.9,
+	targetBarScaleY = 0.7,
+	targetBarFontOffset = -2,
 	targetBarIconScale = 1,
 	showEnemyId = false;
 	alwaysShowHealthPercent = false,

@@ -8,7 +8,11 @@ local d3d8dev = d3d.get_device();
 
 local progressbar = {
 	-- Bookend
-	bookendFilename = 'bookend',
+	bookendFilename = 'bookend_silver',
+    bgCapFilename = 'bg_cap';
+    bgCap2Filename = 'bg_cap2';
+    fgBodyFilename = 'fg_body';
+    bgBodyFilename = 'bg_body';
 
 	-- Background
 	backgroundGradientStartColor = '#01122b',
@@ -84,6 +88,38 @@ function GetBookendTexture()
 	return tonumber(ffi.cast("uint32_t", progressbar.bookendTexture));
 end
 
+function GetBgCapTexture()
+	if not progressbar.bgCap then
+		progressbar.bgCap = LoadTexture(progressbar.bgCapFilename).image;
+	end
+
+	return tonumber(ffi.cast("uint32_t", progressbar.bgCap));
+end
+
+function GetBgCap2Texture()
+	if not progressbar.bgCap2 then
+		progressbar.bgCap2 = LoadTexture(progressbar.bgCap2Filename).image;
+	end
+
+	return tonumber(ffi.cast("uint32_t", progressbar.bgCap2));
+end
+
+function GetFgBodyTexture()
+	if not progressbar.fgBody then
+		progressbar.fgBody = LoadTexture(progressbar.fgBodyFilename).image;
+	end
+
+	return tonumber(ffi.cast("uint32_t", progressbar.fgBody));
+end
+
+function GetBgBodyTexture()
+	if not progressbar.bgBody then
+		progressbar.bgBody = LoadTexture(progressbar.bgBodyFilename).image;
+	end
+
+	return tonumber(ffi.cast("uint32_t", progressbar.bgBody));
+end
+
 progressbar.DrawBar = function(startPosition, endPosition, gradientStart, gradientEnd, rounding, cornerFlags)
 	if not rounding then
 		rounding = 0;
@@ -92,6 +128,26 @@ progressbar.DrawBar = function(startPosition, endPosition, gradientStart, gradie
 	local gradient = GetGradient(gradientStart, gradientEnd);
 
 	imgui.GetWindowDrawList():AddImageRounded(gradient, startPosition, endPosition, {0, 0}, {1, 1}, IM_COL32_WHITE, rounding, cornerFlags);
+end
+
+progressbar.DrawBarFg = function(startPosition, endPosition, gradientStart, gradientEnd, rounding, cornerFlags)
+	if not rounding then
+		rounding = 0;
+	end
+
+	local gradient = GetGradient(gradientStart, gradientEnd);
+
+	imgui.GetWindowDrawList():AddImageRounded(GetFgBodyTexture(), startPosition, endPosition, {0, 0}, {1, 1}, IM_COL32_WHITE, rounding, cornerFlags);
+end
+
+progressbar.DrawBarBg = function(startPosition, endPosition, gradientStart, gradientEnd, rounding, cornerFlags)
+	if not rounding then
+		rounding = 0;
+	end
+
+	local gradient = GetGradient(gradientStart, gradientEnd);
+
+	imgui.GetWindowDrawList():AddImageRounded(GetBgBodyTexture(), startPosition, endPosition, {0, 0}, {1, 1}, IM_COL32_WHITE, rounding, cornerFlags);
 end
 
 progressbar.DrawColoredBar = function(startPosition, endPosition, color, rounding, cornerFlags)
@@ -104,14 +160,17 @@ end
 
 progressbar.DrawBookends = function(positionStartX, positionStartY, width, height)
 	local bookendTexture = GetBookendTexture();
+    local bgCapTexture = GetBgCapTexture();
+    local bgCap2Texture = GetBgCap2Texture();
 	
-	local bookendWidth = height / 2;
+	local bookendWidth = height / 0.65;
+    local bookendWidth2 = height / 0.325;
 	
 	-- Draw the left bookend
-	imgui.GetWindowDrawList():AddImage(bookendTexture, {positionStartX, positionStartY}, {positionStartX + bookendWidth, positionStartY + height}, {0, 0}, {1, 1}, IM_COL32_WHITE);
+	imgui.GetWindowDrawList():AddImage(bgCapTexture, {positionStartX, positionStartY}, {positionStartX + bookendWidth, positionStartY + height}, {0, 0}, {1, 1}, IM_COL32_WHITE);
 	
 	-- Draw the right bookend
-	imgui.GetWindowDrawList():AddImage(bookendTexture, {positionStartX + width - bookendWidth, positionStartY}, {positionStartX + width, positionStartY + height}, {1, 1}, {0, 0}, IM_COL32_WHITE);
+	imgui.GetWindowDrawList():AddImage(bgCap2Texture, {positionStartX + width + bookendWidth2, positionStartY}, {positionStartX + width, positionStartY + height}, {0, 0}, {1, 1}, IM_COL32_WHITE);
 end
 
 progressbar.ProgressBar  = function(percentList, dimensions, options)
@@ -142,9 +201,9 @@ progressbar.ProgressBar  = function(percentList, dimensions, options)
 
 	-- Draw the bookends!
 	if options.decorate then
-		local bookendWidth = height / 2;
+		local bookendWidth = height / 0.65;
 		
-		contentWidth = width - (bookendWidth * 2);
+		contentWidth = width - (bookendWidth);
 		contentPositionStartX = contentPositionStartX + bookendWidth;
 		
 		progressbar.DrawBookends(positionStartX, positionStartY, width, height);
@@ -160,16 +219,16 @@ progressbar.ProgressBar  = function(percentList, dimensions, options)
 	end
 
 	rounding = options.decorate and progressbar.backgroundRounding or gConfig.noBookendRounding;
-	progressbar.DrawBar({contentPositionStartX, contentPositionStartY}, {contentPositionStartX + contentWidth, contentPositionStartY + height}, bgGradientStart, bgGradientEnd, rounding);
+	progressbar.DrawBarBg({contentPositionStartX, contentPositionStartY}, {contentPositionStartX + contentWidth, contentPositionStartY + height}, bgGradientStart, bgGradientEnd, rounding);
 	
 	-- Compute the actual progress bar's width and height
 	local paddingHalf = progressbar.foregroundPadding / 2;
 	
-	local progressPositionStartX = contentPositionStartX + paddingHalf;
-	local progressPositionStartY = contentPositionStartY + paddingHalf;
+	local progressPositionStartX = contentPositionStartX;
+	local progressPositionStartY = contentPositionStartY + 2;
 	
-	local progressTotalWidth = contentWidth - progressbar.foregroundPadding;
-	local progressHeight = height - progressbar.foregroundPadding;
+	local progressTotalWidth = contentWidth;
+	local progressHeight = height - paddingHalf -2;
 	
 	-- Draw the progress bar(s)
 	local progressOffset = 0;
@@ -177,17 +236,22 @@ progressbar.ProgressBar  = function(percentList, dimensions, options)
 	for i, percentData in ipairs(percentList) do
 		local percent = math.clamp(percentData[1], 0, 1);
 
-		local cornerFlags = ImDrawCornerFlags_All;
+        local cornerFlags = ImDrawFlags_RoundCornersNone;
+        
 
-		if #percentList > 1 then
-			if i == 1 then
-				cornerFlags = ImDrawCornerFlags_Left;
-			elseif i == #percentList then
-				cornerFlags = ImDrawCornerFlags_Right;
-			else
-				cornerFlags = ImDrawCornerFlags_None;
-			end
-		end
+        if(not options.decorate) then
+            cornerFlags = ImDrawFlags_RoundCornersAll;
+
+            if #percentList > 1 then
+                if i == 1 then
+                    cornerFlags = ImDrawFlags_RoundCornersLeft;
+                elseif i == #percentList then
+                    cornerFlags = ImDrawFlags_RoundCornersRight;
+                else
+                    cornerFlags = ImDrawFlags_RoundCornersNone;
+                end
+            end
+        end
 		
 		if percent > 0 then
 			local startColor = percentData[2][1];
@@ -197,7 +261,7 @@ progressbar.ProgressBar  = function(percentList, dimensions, options)
 			local progressWidth = progressTotalWidth * percent;
 			
 			rounding = options.decorate and progressbar.foregroundRounding or gConfig.noBookendRounding;
-			progressbar.DrawBar({progressPositionStartX + progressOffset, progressPositionStartY}, {progressPositionStartX + progressOffset + progressWidth, progressPositionStartY + progressHeight}, startColor, endColor, rounding, cornerFlags);
+			progressbar.DrawBarFg({progressPositionStartX + progressOffset, progressPositionStartY +2}, {progressPositionStartX + progressOffset + progressWidth, progressPositionStartY + progressHeight +2}, startColor, endColor, rounding, cornerFlags);
 
 			if overlayConfiguration then
 				local overlayColor = overlayConfiguration[1];
