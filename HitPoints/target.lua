@@ -42,7 +42,7 @@ T{
 		box_width = 0,
 		font_alignment = texts.Alignment.Left;
 		font_color = 0xFFFFFFFF,
-		font_family = 'MS Gothic',
+		font_family = 'Consolas',
 		font_flags = texts.FontFlags.Italic + texts.FontFlags.Bold,
 		font_height = 16,
 		gradient_color = 0x00000000,
@@ -60,7 +60,7 @@ T{
 		box_width = 0,
 		font_alignment = texts.Alignment.Left;
 		font_color = 0xFFFFFFFF,
-		font_family = 'MS Gothic',
+		font_family = 'Consolas',
 		font_flags = texts.FontFlags.Italic + texts.FontFlags.Bold,
 		font_height = 16,
 		gradient_color = 0x00000000,
@@ -78,7 +78,7 @@ T{
 		box_width = 0,
 		font_alignment = texts.Alignment.Right;
 		font_color = 0xFFFFFFFF,
-		font_family = 'Bembo',
+		font_family = 'Consolas',
 		font_flags = texts.FontFlags.Bold,
 		font_height = 15,
 		gradient_color = 0x00000000,
@@ -96,7 +96,7 @@ T{
 		box_width = 0,
 		font_alignment = texts.Alignment.Right;
 		font_color = 0xFFFFFFFF,
-		font_family = 'Bembo',
+		font_family = 'Consolas',
 		font_flags = texts.FontFlags.Italic + texts.FontFlags.Bold,
 		font_height = 15,
 		gradient_color = 0x00000000,
