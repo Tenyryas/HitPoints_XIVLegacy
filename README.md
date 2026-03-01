@@ -1,6 +1,7 @@
 # HitPoints
 
-An Ashita v4 addon for displaying your target and any enemies you are currently engaged with.
+An Ashita v4 addon for displaying your target and any enemies you are currently engaged with. 
+Now with a tasty theme reminiscent of legacy XIV!
 
 ## Show Your Support ##
 If you would like to show your support for my addon creation consider buying me a coffee! 
@@ -19,7 +20,7 @@ Hovering over any status icon will popup a help text explaining the buff or debu
 
 **NOTE:** If you are familiar with one of my other addons `HXUI` you will notice some strong similarities. I re-used a chunk of the code when putting this together at first, but HXUI is based on imgui which caused lots of issues. This addon will slowly be moving away from imgui and instead use a sprite based renderer in future updates, as well as be focused primarily on use in retail, not specifically the Horizon server.
 
-![Screenshot](https://user-images.githubusercontent.com/7691562/248598451-a3f9a6b7-3302-4bf2-becd-e94dd388bc77.png)
+![Screenshot](https://github.com/user-attachments/assets/3b74a491-3208-4f6b-9945-bf671a2a9a34)
 
 
 ## Installation
