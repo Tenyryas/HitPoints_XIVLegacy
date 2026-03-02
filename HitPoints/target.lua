@@ -164,6 +164,11 @@ target.UpdateSettings = function(userSettings)
 	targetSettings.iconSize = round(defaultTargetSettings.iconSize * userSettings.targetBarIconScale);
 	targetSettings.arrowSize = round(defaultTargetSettings.arrowSize * userSettings.targetBarScaleY);
 
+    targetSettings.name_font_settings.font_family = userSettings.nameFont;
+    targetSettings.totName_font_settings.font_family = userSettings.totFont;
+    targetSettings.distance_font_settings.font_family = userSettings.distanceFont;
+    targetSettings.percent_font_settings.font_family = userSettings.percentFont;
+
 	if not initialized then
 		target.Initialize(targetSettings);
 	else

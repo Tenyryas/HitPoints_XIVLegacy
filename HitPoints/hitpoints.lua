@@ -37,7 +37,6 @@ local imgui = require('imgui');
 local settings = require('settings');
 local engaged = require('engaged');
 local target = require('target');
---local target = require('target');
 
 -- Initialize our status lib and begin tracking by packet
 gStatusLib = require('libs/status/status');
@@ -58,7 +57,10 @@ T{
 	showEnemyId = false;
 	alwaysShowHealthPercent = false,
 	targetBarNumStatusPerRow = 16,
-
+    nameFont = 'Consolas',
+    totFont = 'Consolas',
+    percentFont = 'Consolas',
+    distanceFont = 'Consolas',
 	showEnemyList = true,
 	enemyListScaleX = 1,
 	enemyListScaleY = 1,
